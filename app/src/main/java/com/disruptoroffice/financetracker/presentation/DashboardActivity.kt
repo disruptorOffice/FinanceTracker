@@ -1,4 +1,4 @@
-package com.disruptoroffice.financetracker
+package com.disruptoroffice.financetracker.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,9 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.disruptoroffice.financetracker.ui.theme.FinanceTrackerTheme
+import com.disruptoroffice.financetracker.presentation.ui.theme.FinanceTrackerTheme
 
-class MainActivity : ComponentActivity() {
+class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             FinanceTrackerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "Dasboard tracker",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -42,6 +42,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     FinanceTrackerTheme {
-        Greeting("Android")
+        Greeting("Dasboard tracker")
     }
 }
