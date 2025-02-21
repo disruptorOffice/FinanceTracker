@@ -35,7 +35,7 @@ private val loginRepository: LoginRepository,
             _loginState.value = LoginState.Loading
 
             if (username.trim().isBlank() || password.trim().isBlank()) {
-                _loginState.value = LoginState.ValidationError("Todos los campos son obligatorios")
+                _loginState.value = LoginState.Error("Todos los campos son obligatorios")
                 return@launch
             }
 
