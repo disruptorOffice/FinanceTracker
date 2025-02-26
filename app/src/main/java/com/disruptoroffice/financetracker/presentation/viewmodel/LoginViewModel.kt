@@ -41,7 +41,10 @@ private val loginRepository: LoginRepository,
 
             val result = loginRepository.login(username, password)
             if (result.isSuccessful) {
-                session.storeSessionToken(result.body.token)
+                session.storeSessionToken(
+                    result.body.token,
+                    result.body.userId.toString()
+                )
                 _loginState.value = LoginState.Success
             }
             else

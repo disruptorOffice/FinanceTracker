@@ -2,11 +2,14 @@ package com.disruptoroffice.financetracker.data.endpoints
 
 import com.disruptoroffice.financetracker.data.endpoints.requests.LoginRequest
 import com.disruptoroffice.financetracker.data.endpoints.requests.RegisterRequest
+import com.disruptoroffice.financetracker.data.endpoints.responses.FinanceRecordResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.LoginResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.RegisterResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -15,4 +18,7 @@ interface ApiService {
 
     @POST("v1/users")
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
+
+    @GET("v1/users/{user_id}/finances")
+    suspend fun retrieveRecords(@Path("user_id") userId: String): Response<List<FinanceRecordResponse>>
 }

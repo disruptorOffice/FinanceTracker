@@ -7,22 +7,33 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    private const val BASE_URL = "http://10.0.2.2:4000/" // Cambia esta URL por la de tu API
+    private const val BASE_URL = "http://10.0.2.2:4000/"
 
-    private val retrofit: Retrofit by lazy {
-        val client = OkHttpClient.Builder()
+    private fun createOkHttpClient(token: String?): OkHttpClient {
+        return OkHttpClient.Builder()
             .readTimeout(900, TimeUnit.SECONDS)
             .connectTimeout(900, TimeUnit.SECONDS)
-            .build()
+            .addInterceptor { chain ->
+                val requestBuilder = chain.request().newBuilder()
 
-        Retrofit.Builder()
+                token?.let {
+                    requestBuilder.addHeader("Authorization", "Bearer $it")
+                }
+
+                chain.proceed(requestBuilder.build())
+            }
+            .build()
+    }
+
+    private fun createRetrofit(token: String?): Retrofit {
+        return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(client)
+            .client(createOkHttpClient(token))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    fun <T> createService(serviceClass: Class<T>): T {
-        return retrofit.create(serviceClass)
+    fun <T> createService(serviceClass: Class<T>, token: String? = null): T {
+        return createRetrofit(token).create(serviceClass)
     }
 }

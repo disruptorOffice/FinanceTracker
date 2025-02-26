@@ -1,5 +1,6 @@
 package com.disruptoroffice.financetracker.di
 
+import com.disruptoroffice.financetracker.data.repositories.FinanceRecordRepository
 import com.disruptoroffice.financetracker.data.repositories.LoginRepository
 import com.disruptoroffice.financetracker.data.repositories.RegisterRepository
 import dagger.Module
@@ -19,5 +20,10 @@ object ViewModelModule {
     @Provides
     fun provideRegisterRepository(): RegisterRepository {
         return RegisterRepository()
+    }
+
+    @Provides
+    fun provideFinanceRecordRepository(): FinanceRecordRepository {
+        return FinanceRecordRepository()
     }
 }

@@ -8,11 +8,16 @@ import androidx.navigation.toRoute
 import com.disruptoroffice.financetracker.presentation.screens.DashboardScreen
 import com.disruptoroffice.financetracker.presentation.screens.LoginScreen
 import com.disruptoroffice.financetracker.presentation.screens.RegisterScreen
+import com.disruptoroffice.financetracker.presentation.viewmodel.DashboardViewmodel
 import com.disruptoroffice.financetracker.presentation.viewmodel.LoginViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.RegisterViewModel
 
 @Composable
-fun NavigationWrapper(loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel) {
+fun NavigationWrapper(
+    loginViewModel: LoginViewModel,
+    registerViewModel: RegisterViewModel,
+    dashboardViewmodel: DashboardViewmodel,
+) {
     val navController = rememberNavController()
 
     NavHost( navController = navController, startDestination = Login(false)) {
@@ -29,7 +34,7 @@ fun NavigationWrapper(loginViewModel: LoginViewModel, registerViewModel: Registe
                 })
         }
         composable<Dashboard> {
-            DashboardScreen()
+            DashboardScreen(dashboardViewmodel)
         }
         composable<Register> {
             RegisterScreen(
