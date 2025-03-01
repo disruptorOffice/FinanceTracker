@@ -6,10 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.disruptoroffice.financetracker.presentation.screens.DashboardScreen
+import com.disruptoroffice.financetracker.presentation.screens.FinanceRecordScreen
 import com.disruptoroffice.financetracker.presentation.screens.LoginScreen
 import com.disruptoroffice.financetracker.presentation.screens.RegisterScreen
 import com.disruptoroffice.financetracker.presentation.viewmodel.DashboardViewmodel
 import com.disruptoroffice.financetracker.presentation.viewmodel.LoginViewModel
+import com.disruptoroffice.financetracker.presentation.viewmodel.NewRecordViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.RegisterViewModel
 
 @Composable
@@ -17,6 +19,7 @@ fun NavigationWrapper(
     loginViewModel: LoginViewModel,
     registerViewModel: RegisterViewModel,
     dashboardViewmodel: DashboardViewmodel,
+    newRecordViewModel: NewRecordViewModel
 ) {
     val navController = rememberNavController()
 
@@ -34,7 +37,9 @@ fun NavigationWrapper(
                 })
         }
         composable<Dashboard> {
-            DashboardScreen(dashboardViewmodel)
+            DashboardScreen(dashboardViewmodel) {
+                navController.navigate(NewRecord)
+            }
         }
         composable<Register> {
             RegisterScreen(
@@ -45,6 +50,10 @@ fun NavigationWrapper(
                     }
                 }
             )
+        }
+
+        composable<NewRecord> {
+            FinanceRecordScreen(newRecordViewModel)
         }
     }
 }

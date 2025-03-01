@@ -22,14 +22,14 @@ import com.disruptoroffice.financetracker.presentation.states.DashboardState
 import com.disruptoroffice.financetracker.presentation.viewmodel.DashboardViewmodel
 
 @Composable
-fun DashboardScreen(viewModel: DashboardViewmodel) {
+fun DashboardScreen(viewModel: DashboardViewmodel, navigateToNewRecord: () -> Unit) {
     val state = viewModel.state.collectAsState()
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    //todo: open form to register finance record
+                    navigateToNewRecord()
                 }
             ) {
                 Icon(Icons.Filled.Add, "Add record")

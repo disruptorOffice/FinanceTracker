@@ -11,3 +11,6 @@ object Dashboard
 
 @Serializable
 object Register
+
+@Serializable
+object NewRecord
