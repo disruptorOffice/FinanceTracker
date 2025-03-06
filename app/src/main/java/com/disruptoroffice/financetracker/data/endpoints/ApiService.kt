@@ -1,9 +1,11 @@
 package com.disruptoroffice.financetracker.data.endpoints
 
 import com.disruptoroffice.financetracker.data.endpoints.requests.LoginRequest
+import com.disruptoroffice.financetracker.data.endpoints.requests.NewRecordRequest
 import com.disruptoroffice.financetracker.data.endpoints.requests.RegisterRequest
 import com.disruptoroffice.financetracker.data.endpoints.responses.FinanceRecordResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.LoginResponse
+import com.disruptoroffice.financetracker.data.endpoints.responses.NewRecordResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.RegisterResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.TypeCategoryResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.TypePaymentResponse
@@ -29,4 +31,7 @@ interface ApiService {
 
     @GET("v1/categories")
     suspend fun typeCategories(): Response<List<TypeCategoryResponse>>
+
+    @POST("v1/finances")
+    suspend fun storeRecord(@Body request: NewRecordRequest): Response<NewRecordResponse>
 }

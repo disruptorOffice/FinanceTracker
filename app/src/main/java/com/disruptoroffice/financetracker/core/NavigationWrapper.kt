@@ -53,7 +53,9 @@ fun NavigationWrapper(
         }
 
         composable<NewRecord> {
-            FinanceRecordScreen(newRecordViewModel)
+            FinanceRecordScreen(newRecordViewModel) {
+                navController.popBackStack()
+            }
         }
     }
 }

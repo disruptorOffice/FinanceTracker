@@ -6,14 +6,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
@@ -25,12 +28,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.disruptoroffice.financetracker.presentation.AmountType
+import com.disruptoroffice.financetracker.presentation.states.LoginState
+import com.disruptoroffice.financetracker.presentation.states.NewRecordState
 import com.disruptoroffice.financetracker.presentation.viewmodel.NewRecordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FinanceRecordScreen(viewModel: NewRecordViewModel) {
+fun FinanceRecordScreen(viewModel: NewRecordViewModel, onNavigateToDashboard: () -> Unit) {
 
+    val state by viewModel.state.collectAsState()
     val typePayments = viewModel.typePayments.collectAsState()
     val typeCategories = viewModel.typeCategories.collectAsState()
 
@@ -42,6 +48,17 @@ fun FinanceRecordScreen(viewModel: NewRecordViewModel) {
     var amountType by remember { mutableStateOf(AmountType.EXPENSE.value) }
     var categoryType by remember { mutableStateOf("") }
     var paymentType by remember { mutableStateOf("") }
+
+    LaunchedEffect(state) {
+        if (state is NewRecordState.Success)
+            onNavigateToDashboard()
+    }
+
+    if (state is NewRecordState.Error)
+        ErrorDialog(
+            (state as NewRecordState.Error).message,
+            onDismissRequest =  { viewModel.resetState() },
+            onConfirmButton = { viewModel.resetState() })
 
 
     Column(
@@ -180,10 +197,30 @@ fun FinanceRecordScreen(viewModel: NewRecordViewModel) {
         ElevatedButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                //todo: guardar por viewmodel
+                viewModel.storeRecord(
+                    concept,
+                    amount,
+                    amountType,
+                    categoryType,
+                    paymentType
+                )
             },
         ) {
             Text("Guardar")
         }
     }
+}
+
+@Composable
+private fun ErrorDialog(message: String,
+                        onDismissRequest: () -> Unit,
+                        onConfirmButton: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text(text = "Error al iniciar sesion") },
+        text = { Text(text = message) },
+        confirmButton = {
+            TextButton(onClick = onConfirmButton) { Text("Aceptar") }
+        }
+    )
 }
