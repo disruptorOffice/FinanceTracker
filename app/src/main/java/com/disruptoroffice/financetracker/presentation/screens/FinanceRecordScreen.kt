@@ -28,13 +28,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.disruptoroffice.financetracker.presentation.AmountType
-import com.disruptoroffice.financetracker.presentation.states.LoginState
 import com.disruptoroffice.financetracker.presentation.states.NewRecordState
 import com.disruptoroffice.financetracker.presentation.viewmodel.NewRecordViewModel
+import com.disruptoroffice.financetracker.presentation.viewmodel.SharedRecordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FinanceRecordScreen(viewModel: NewRecordViewModel, onNavigateToDashboard: () -> Unit) {
+fun FinanceRecordScreen(
+    viewModel: NewRecordViewModel,
+    sharedViewModel: SharedRecordViewModel,
+    onNavigateToDashboard: () -> Unit,
+) {
 
     val state by viewModel.state.collectAsState()
     val typePayments = viewModel.typePayments.collectAsState()
@@ -50,8 +54,10 @@ fun FinanceRecordScreen(viewModel: NewRecordViewModel, onNavigateToDashboard: ()
     var paymentType by remember { mutableStateOf("") }
 
     LaunchedEffect(state) {
-        if (state is NewRecordState.Success)
+        if (state is NewRecordState.Success) {
+            sharedViewModel.setRefresNeeded()
             onNavigateToDashboard()
+        }
     }
 
     if (state is NewRecordState.Error)

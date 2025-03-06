@@ -13,13 +13,15 @@ import com.disruptoroffice.financetracker.presentation.viewmodel.DashboardViewmo
 import com.disruptoroffice.financetracker.presentation.viewmodel.LoginViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.NewRecordViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.RegisterViewModel
+import com.disruptoroffice.financetracker.presentation.viewmodel.SharedRecordViewModel
 
 @Composable
 fun NavigationWrapper(
     loginViewModel: LoginViewModel,
     registerViewModel: RegisterViewModel,
     dashboardViewmodel: DashboardViewmodel,
-    newRecordViewModel: NewRecordViewModel
+    newRecordViewModel: NewRecordViewModel,
+    sharedRecordViewmodel: SharedRecordViewModel
 ) {
     val navController = rememberNavController()
 
@@ -37,7 +39,7 @@ fun NavigationWrapper(
                 })
         }
         composable<Dashboard> {
-            DashboardScreen(dashboardViewmodel) {
+            DashboardScreen(dashboardViewmodel, sharedRecordViewmodel) {
                 navController.navigate(NewRecord)
             }
         }
@@ -53,7 +55,7 @@ fun NavigationWrapper(
         }
 
         composable<NewRecord> {
-            FinanceRecordScreen(newRecordViewModel) {
+            FinanceRecordScreen(newRecordViewModel, sharedRecordViewmodel) {
                 navController.popBackStack()
             }
         }

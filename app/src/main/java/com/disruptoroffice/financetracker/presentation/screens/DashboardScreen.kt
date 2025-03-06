@@ -13,17 +13,32 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.disruptoroffice.financetracker.data.endpoints.responses.FinanceRecordResponse
 import com.disruptoroffice.financetracker.presentation.composables.FinanceRow
 import com.disruptoroffice.financetracker.presentation.states.DashboardState
 import com.disruptoroffice.financetracker.presentation.viewmodel.DashboardViewmodel
+import com.disruptoroffice.financetracker.presentation.viewmodel.SharedRecordViewModel
 
 @Composable
-fun DashboardScreen(viewModel: DashboardViewmodel, navigateToNewRecord: () -> Unit) {
+fun DashboardScreen(
+    viewModel: DashboardViewmodel,
+    sharedViewModel: SharedRecordViewModel,
+    navigateToNewRecord: () -> Unit,
+) {
     val state = viewModel.state.collectAsState()
+    val shouldRefresh by sharedViewModel.shouldRefresh.collectAsState()
+
+    LaunchedEffect(shouldRefresh) {
+        if (shouldRefresh) {
+            viewModel.fetchData()
+            sharedViewModel.resetRefresh()
+        }
+    }
 
     Scaffold(
         floatingActionButton = {
