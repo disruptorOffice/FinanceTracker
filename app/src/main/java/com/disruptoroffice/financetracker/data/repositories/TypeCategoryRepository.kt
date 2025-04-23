@@ -6,11 +6,11 @@ import com.disruptoroffice.financetracker.data.SimpleResponse
 import com.disruptoroffice.financetracker.data.endpoints.ApiService
 import com.disruptoroffice.financetracker.data.endpoints.responses.TypeCategoryResponse
 
-class TypeCategoryRepository {
+class TypeCategoryRepository(private val httpClient: RetrofitClient) {
 
     suspend fun retrieveTypeCategory(token: String): SimpleResponse<List<TypeCategoryResponse>> {
 
-        val apiService = RetrofitClient.createService(ApiService::class.java, token)
+        val apiService = httpClient.createService(ApiService::class.java, token)
 
         return NetworkUtil.safeApiCall { apiService.typeCategories() }
     }

@@ -5,14 +5,16 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-object RetrofitClient {
+class RetrofitClient(
+    private val session: SessionPreferences
+) {
 
-    private const val BASE_URL = "http://10.0.2.2:4000/"
+
+    private val BASE_URL = "http://10.0.2.2:4000/"
 
     private fun createOkHttpClient(token: String?): OkHttpClient {
         return OkHttpClient.Builder()
-            .readTimeout(900, TimeUnit.SECONDS)
-            .connectTimeout(900, TimeUnit.SECONDS)
+            .addInterceptor(CookieInterceptor(session))
             .addInterceptor { chain ->
                 val requestBuilder = chain.request().newBuilder()
 
@@ -22,6 +24,9 @@ object RetrofitClient {
 
                 chain.proceed(requestBuilder.build())
             }
+            .authenticator(TokenAuthenticator(dataStoreManager = session, this))
+            .readTimeout(900, TimeUnit.SECONDS)
+            .connectTimeout(900, TimeUnit.SECONDS)
             .build()
     }
 

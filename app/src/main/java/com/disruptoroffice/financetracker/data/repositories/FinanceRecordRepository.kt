@@ -8,16 +8,16 @@ import com.disruptoroffice.financetracker.data.endpoints.requests.NewRecordReque
 import com.disruptoroffice.financetracker.data.endpoints.responses.FinanceRecordResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.NewRecordResponse
 
-class FinanceRecordRepository {
+class FinanceRecordRepository(private val httpClient: RetrofitClient) {
 
     suspend fun retrieveRecords(token: String, userId: String): SimpleResponse<List<FinanceRecordResponse>> {
-        val apiService = RetrofitClient.createService(ApiService::class.java, token)
+        val apiService = httpClient.createService(ApiService::class.java, token)
 
         return NetworkUtil.safeApiCall { apiService.retrieveRecords(userId) }
     }
 
     suspend fun storeNewRecord(request: NewRecordRequest, token: String): SimpleResponse<NewRecordResponse> {
-        val apiService = RetrofitClient.createService(ApiService::class.java, token)
+        val apiService = httpClient.createService(ApiService::class.java, token)
 
         return NetworkUtil.safeApiCall { apiService.storeRecord(request) }
     }

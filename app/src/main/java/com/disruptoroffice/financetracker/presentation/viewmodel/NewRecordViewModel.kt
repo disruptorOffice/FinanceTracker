@@ -36,12 +36,7 @@ class NewRecordViewModel @Inject constructor(
     val state: StateFlow<NewRecordState>
         get() = _state
 
-    init {
-        retrieveTypePayments()
-        retrieveTypeCatgories()
-    }
-
-    private fun retrieveTypePayments() {
+    fun retrieveTypePayments() {
         viewModelScope.launch(Dispatchers.IO) {
             val result = typePaymentRepository.retrieveTyePayments(session.sessionToken.first())
 
@@ -52,7 +47,7 @@ class NewRecordViewModel @Inject constructor(
         }
     }
 
-    private fun retrieveTypeCatgories() {
+    fun retrieveTypeCatgories() {
         viewModelScope.launch(Dispatchers.IO) {
             val result = categoryRepository.retrieveTypeCategory(session.sessionToken.first())
 

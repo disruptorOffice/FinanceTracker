@@ -40,6 +40,10 @@ fun DashboardScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchData()
+    }
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(

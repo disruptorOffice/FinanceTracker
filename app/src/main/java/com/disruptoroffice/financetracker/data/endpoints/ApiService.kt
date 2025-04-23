@@ -6,12 +6,14 @@ import com.disruptoroffice.financetracker.data.endpoints.requests.RegisterReques
 import com.disruptoroffice.financetracker.data.endpoints.responses.FinanceRecordResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.LoginResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.NewRecordResponse
+import com.disruptoroffice.financetracker.data.endpoints.responses.RefreshTokenResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.RegisterResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.TypeCategoryResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.TypePaymentResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -34,4 +36,11 @@ interface ApiService {
 
     @POST("v1/finances")
     suspend fun storeRecord(@Body request: NewRecordRequest): Response<NewRecordResponse>
+
+    @POST("v1/auth/refresh")
+    suspend fun refreshToken(
+        @Header("Cookie") cookie: String
+    ) : Response<RefreshTokenResponse>
+
+
 }

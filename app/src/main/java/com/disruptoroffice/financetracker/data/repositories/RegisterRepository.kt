@@ -9,7 +9,7 @@ import com.disruptoroffice.financetracker.data.endpoints.responses.RegisterRespo
 import com.google.gson.Gson
 import retrofit2.Response
 
-class RegisterRepository {
+class RegisterRepository(private val httpClient: RetrofitClient) {
 
     suspend fun register(firtsName: String, lastName: String, username: String, password: String): SimpleResponse<RegisterResponse> {
         val request = RegisterRequest(
@@ -19,7 +19,7 @@ class RegisterRepository {
             password = password
         )
 
-        val apiService = RetrofitClient.createService(ApiService::class.java)
+        val apiService = httpClient.createService(ApiService::class.java)
 
         return safeApiCall { apiService.register(request) }
     }

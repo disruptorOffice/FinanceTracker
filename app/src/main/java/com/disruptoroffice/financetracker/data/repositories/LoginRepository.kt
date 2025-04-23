@@ -9,12 +9,12 @@ import com.disruptoroffice.financetracker.data.endpoints.responses.LoginResponse
 import com.google.gson.Gson
 import retrofit2.Response
 
-class LoginRepository {
+class LoginRepository(private val httpClient: RetrofitClient) {
 
     suspend fun login(username: String, password: String): SimpleResponse<LoginResponse> {
         val request = LoginRequest(username = username, password = password)
 
-        val apiService = RetrofitClient.createService(ApiService::class.java)
+        val apiService = httpClient.createService(ApiService::class.java)
 
         return safeApiCall { apiService.login(request) }
 

@@ -1,6 +1,7 @@
 package com.disruptoroffice.financetracker.di
 
 import android.content.Context
+import com.disruptoroffice.financetracker.config.RetrofitClient
 import com.disruptoroffice.financetracker.config.SessionPreferences
 import dagger.Module
 import dagger.Provides
@@ -17,5 +18,11 @@ object AppComponent {
     @Singleton
     fun provideSessionPreferences(@ApplicationContext context: Context): SessionPreferences {
         return SessionPreferences(context)
+    }
+
+    @Provides
+    @Singleton
+    fun providesRetrofitClient(session: SessionPreferences): RetrofitClient {
+        return RetrofitClient(session)
     }
 }

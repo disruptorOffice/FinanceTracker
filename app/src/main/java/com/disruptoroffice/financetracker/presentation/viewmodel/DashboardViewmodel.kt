@@ -24,10 +24,6 @@ class DashboardViewmodel @Inject constructor(
     val state: StateFlow<DashboardState<List<FinanceRecordResponse>>>
         get() = _state
 
-    init {
-        fetchData()
-    }
-
     fun fetchData() {
         viewModelScope.launch(Dispatchers.IO) {
             val result = financeRepository.retrieveRecords(session.sessionToken.first(), session.userId.first())

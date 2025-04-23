@@ -15,6 +15,7 @@ class SessionPreferences(private val context: Context) {
         val IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
         val SESSION_TOKEN = stringPreferencesKey("session_token")
         val USER_ID = stringPreferencesKey("session_user_id")
+        val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
     }
 
     val isLoggedIng: Flow<Boolean> = context.dataStore.data
@@ -25,6 +26,9 @@ class SessionPreferences(private val context: Context) {
 
     val userId: Flow<String> = context.dataStore.data
         .map { preferences -> preferences[USER_ID] ?: ""}
+
+    val refreshToken: Flow<String> = context.dataStore.data
+        .map { prefs -> prefs[REFRESH_TOKEN] ?: ""}
 
     suspend fun storeSessionToken(token: String, userId: String) {
         context.dataStore.edit { preferences ->
@@ -39,6 +43,19 @@ class SessionPreferences(private val context: Context) {
             prefs[IS_LOGGED_IN] = false
             prefs[SESSION_TOKEN] = ""
             prefs[USER_ID] = ""
+            prefs[REFRESH_TOKEN] = ""
+        }
+    }
+
+    suspend fun saveToken(token: String) {
+        context.dataStore.edit { prefs ->
+            prefs[SESSION_TOKEN] = token
+        }
+    }
+
+    suspend fun saveRefreshToken(refreshToken: String) {
+        context.dataStore.edit { prefs ->
+            prefs[REFRESH_TOKEN] = refreshToken
         }
     }
 

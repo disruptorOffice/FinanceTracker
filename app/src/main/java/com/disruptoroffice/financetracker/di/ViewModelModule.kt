@@ -1,5 +1,6 @@
 package com.disruptoroffice.financetracker.di
 
+import com.disruptoroffice.financetracker.config.RetrofitClient
 import com.disruptoroffice.financetracker.data.repositories.FinanceRecordRepository
 import com.disruptoroffice.financetracker.data.repositories.LoginRepository
 import com.disruptoroffice.financetracker.data.repositories.RegisterRepository
@@ -15,27 +16,27 @@ import dagger.hilt.android.components.ViewModelComponent
 object ViewModelModule {
 
     @Provides
-    fun provideLoginRepository(): LoginRepository {
-        return LoginRepository()
+    fun provideLoginRepository(httpClient: RetrofitClient): LoginRepository {
+        return LoginRepository(httpClient)
     }
 
     @Provides
-    fun provideRegisterRepository(): RegisterRepository {
-        return RegisterRepository()
+    fun provideRegisterRepository(httpClient: RetrofitClient): RegisterRepository {
+        return RegisterRepository(httpClient)
     }
 
     @Provides
-    fun provideFinanceRecordRepository(): FinanceRecordRepository {
-        return FinanceRecordRepository()
+    fun provideFinanceRecordRepository(httpClient: RetrofitClient): FinanceRecordRepository {
+        return FinanceRecordRepository(httpClient)
     }
 
     @Provides
-    fun providesTypePaymentRepository(): TypePaymentRepository {
-        return TypePaymentRepository()
+    fun providesTypePaymentRepository(httpClient: RetrofitClient): TypePaymentRepository {
+        return TypePaymentRepository(httpClient)
     }
 
     @Provides
-    fun providesTypeCategoryRepository(): TypeCategoryRepository {
-        return TypeCategoryRepository()
+    fun providesTypeCategoryRepository(httpClient: RetrofitClient): TypeCategoryRepository {
+        return TypeCategoryRepository(httpClient)
     }
 }

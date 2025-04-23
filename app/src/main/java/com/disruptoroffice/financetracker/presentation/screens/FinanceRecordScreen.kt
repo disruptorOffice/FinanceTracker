@@ -53,6 +53,11 @@ fun FinanceRecordScreen(
     var categoryType by remember { mutableStateOf("") }
     var paymentType by remember { mutableStateOf("") }
 
+    LaunchedEffect(Unit) {
+        viewModel.retrieveTypePayments()
+        viewModel.retrieveTypeCatgories()
+    }
+
     LaunchedEffect(state) {
         if (state is NewRecordState.Success) {
             sharedViewModel.setRefresNeeded()
