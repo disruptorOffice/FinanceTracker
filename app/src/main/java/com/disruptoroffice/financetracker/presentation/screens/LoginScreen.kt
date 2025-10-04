@@ -148,7 +148,7 @@ fun LoginScreen(
                 text = annotatedString,
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontSize = 15.sp,
-                    color = Color(0xFF000000),
+                    color = Color(0xFFFFFFFF),
                     textDecoration = TextDecoration.None,
                     textAlign = TextAlign.Center,
                 ),
