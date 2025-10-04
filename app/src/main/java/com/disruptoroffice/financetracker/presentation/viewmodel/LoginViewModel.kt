@@ -43,7 +43,10 @@ private val loginRepository: LoginRepository,
             if (result.isSuccessful) {
                 session.storeSessionToken(
                     result.body.token,
-                    result.body.userId.toString()
+                    result.body.userId.toString(),
+                    result.body.first_name,
+                    result.body.last_name,
+                    result.body.username
                 )
                 _loginState.value = LoginState.Success
             }

@@ -6,6 +6,7 @@ import com.disruptoroffice.financetracker.config.SessionPreferences
 import com.disruptoroffice.financetracker.data.endpoints.responses.FinanceRecordResponse
 import com.disruptoroffice.financetracker.data.repositories.FinanceRecordRepository
 import com.disruptoroffice.financetracker.presentation.states.DashboardState
+import com.disruptoroffice.financetracker.presentation.states.DashboardState2
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,10 @@ class DashboardViewmodel @Inject constructor(
     private val _state = MutableStateFlow<DashboardState<List<FinanceRecordResponse>>>(DashboardState.Loading)
     val state: StateFlow<DashboardState<List<FinanceRecordResponse>>>
         get() = _state
+    val _uiState = MutableStateFlow<DashboardState2>(DashboardState2.Idle)
+    val uiState: StateFlow<DashboardState2>
+        get() = _uiState
+
 
     fun fetchData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -36,6 +41,16 @@ class DashboardViewmodel @Inject constructor(
             } else
                 _state.value = DashboardState.Error(result.exception!!.message!!)
         }
+    }
+
+    fun loadUSerData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = DashboardState2.UserData(session.firstName.first())
+        }
+    }
+
+    fun resetState() {
+        _state.value = DashboardState.Idle
     }
 
 }
