@@ -45,7 +45,7 @@ fun FinanceRecordScreen(
     val typeCategories = viewModel.typeCategories.collectAsState()
 
     var concept by remember { mutableStateOf("") }
-    var amount by remember { mutableDoubleStateOf(0.0) }
+    var amount by remember { mutableStateOf("") }
     var isExpanded by remember { mutableStateOf(false) }
     var isCategoryExpanded by remember { mutableStateOf(false) }
     var isPaymentExpanded by remember { mutableStateOf(false) }
@@ -128,13 +128,13 @@ fun FinanceRecordScreen(
 
         TextField(
             modifier = Modifier.fillMaxWidth(),
-            value = amount.toString(),
-            onValueChange = { amount = it.toDouble() },
+            value = amount,
+            onValueChange = { newAmount -> amount = newAmount.filter { it.isDigit()} },
             label = { Text("Cantidad") },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Decimal
+                keyboardType = KeyboardType.Number
             )
         )
         Spacer(modifier =  Modifier.height(32.dp))
@@ -210,7 +210,7 @@ fun FinanceRecordScreen(
             onClick = {
                 viewModel.storeRecord(
                     concept,
-                    amount,
+                    amount.toDouble(),
                     amountType,
                     categoryType,
                     paymentType
