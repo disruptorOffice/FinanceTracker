@@ -57,7 +57,13 @@ fun DashboardScreen(
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when(state.value) {
-                is DashboardState.Loading -> CircularProgressIndicator()
+                is DashboardState.Loading -> Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                    ) {
+                    CircularProgressIndicator()
+                }
+
                 is DashboardState.Error -> Text((state.value as DashboardState.Error).message)
                 is DashboardState.Success -> {
                     val financeItems = (state.value as DashboardState.Success<List<FinanceRecordResponse>>).data
