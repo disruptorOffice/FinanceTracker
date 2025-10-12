@@ -73,4 +73,6 @@ dependencies {
     implementation(libs.preferences.datastore)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlin.serialization.json)
+    // https://mvnrepository.com/artifact/androidx.compose.material/material-icons-extended
+    implementation("androidx.compose.material:material-icons-extended:1.7.7")
 }

@@ -5,13 +5,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -72,152 +77,162 @@ fun FinanceRecordScreen(
             onConfirmButton = { viewModel.resetState() })
 
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-        ExposedDropdownMenuBox(
-            expanded = isExpanded,
-            onExpandedChange = { isExpanded = it}
+    Scaffold { innerPaddings ->
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(innerPaddings)
+                .padding(all = 16.dp)
         ) {
-            TextField(
-                value = amountType,
-                onValueChange = { amountType = it},
-                readOnly = true,
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
-                },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                modifier = Modifier.menuAnchor().fillMaxWidth()
-            )
 
-            ExposedDropdownMenu(
+            ExposedDropdownMenuBox(
                 expanded = isExpanded,
-                onDismissRequest = { isExpanded = false}
+                onExpandedChange = { isExpanded = it}
             ) {
-                DropdownMenuItem(
-                    text = { Text(AmountType.EXPENSE.value) },
-                    onClick = {
-                        amountType = AmountType.EXPENSE.value
-                        isExpanded = false
-                    }
+                TextField(
+                    value = amountType,
+                    onValueChange = { amountType = it},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                    },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    modifier = Modifier.menuAnchor().fillMaxWidth()
                 )
 
-                DropdownMenuItem(
-                    text = { Text(AmountType.INCOME.value) },
-                    onClick = {
-                        amountType = AmountType.INCOME.value
-                        isExpanded = false
-                    }
-                )
+                ExposedDropdownMenu(
+                    expanded = isExpanded,
+                    onDismissRequest = { isExpanded = false}
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(AmountType.EXPENSE.value) },
+                        onClick = {
+                            amountType = AmountType.EXPENSE.value
+                            isExpanded = false
+                        }
+                    )
+
+                    DropdownMenuItem(
+                        text = { Text(AmountType.INCOME.value) },
+                        onClick = {
+                            amountType = AmountType.INCOME.value
+                            isExpanded = false
+                        }
+                    )
+                }
             }
-        }
-        Spacer(modifier =  Modifier.height(32.dp))
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = concept,
-            onValueChange = { concept = it },
-            label = { Text("Concepto") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            )
-
-        )
-        Spacer(modifier =  Modifier.height(32.dp))
-
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = amount,
-            onValueChange = { newAmount -> amount = newAmount.filter { it.isDigit()} },
-            label = { Text("Cantidad") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Number
-            )
-        )
-        Spacer(modifier =  Modifier.height(32.dp))
-
-        ExposedDropdownMenuBox(
-            expanded = isCategoryExpanded,
-            onExpandedChange = { isCategoryExpanded = it}
-        ) {
+            Spacer(modifier =  Modifier.height(32.dp))
             TextField(
-                label = { Text("Categoria") },
-                value = categoryType,
-                onValueChange = { categoryType = it},
-                readOnly = true,
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCategoryExpanded)
-                },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                modifier = Modifier.menuAnchor().fillMaxWidth()
-            )
+                modifier = Modifier.fillMaxWidth(),
+                value = concept,
+                onValueChange = { concept = it },
+                label = { Text("Concepto") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                )
 
-            ExposedDropdownMenu(
+            )
+            Spacer(modifier =  Modifier.height(32.dp))
+
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = amount,
+                onValueChange = { newAmount -> amount = newAmount.filter { it.isDigit()} },
+                label = { Text("Cantidad") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Number
+                ),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.AttachMoney,
+                        contentDescription = "Cantidad a registrar"
+                    )
+                }
+            )
+            Spacer(modifier =  Modifier.height(32.dp))
+
+            ExposedDropdownMenuBox(
                 expanded = isCategoryExpanded,
-                onDismissRequest = { isCategoryExpanded = false}
+                onExpandedChange = { isCategoryExpanded = it}
             ) {
-                typeCategories.value.forEach {
-                    DropdownMenuItem(
-                        text = { Text(it) },
-                        onClick = {
-                            categoryType = it
-                            isCategoryExpanded = false
-                        }
-                    )
-
-                }
-            }
-        }
-        Spacer(modifier =  Modifier.height(32.dp))
-
-        ExposedDropdownMenuBox(
-            expanded = isPaymentExpanded,
-            onExpandedChange = { isPaymentExpanded = it}
-        ) {
-            TextField(
-                label = { Text("Tipo de pago") },
-                value = paymentType,
-                onValueChange = { paymentType = it},
-                readOnly = true,
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isPaymentExpanded)
-                },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                modifier = Modifier.menuAnchor().fillMaxWidth()
-            )
-
-            ExposedDropdownMenu(
-                expanded = isPaymentExpanded,
-                onDismissRequest = { isPaymentExpanded = false}
-            ) {
-                typePayments.value.forEach { item ->
-                    DropdownMenuItem(
-                        text = { Text(item) },
-                        onClick = {
-                            paymentType = item
-                            isPaymentExpanded = false
-                        }
-                    )
-                }
-            }
-        }
-        Spacer(modifier =  Modifier.height(40.dp))
-        ElevatedButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                viewModel.storeRecord(
-                    concept,
-                    amount.toDouble(),
-                    amountType,
-                    categoryType,
-                    paymentType
+                TextField(
+                    label = { Text("Categoria") },
+                    value = categoryType,
+                    onValueChange = { categoryType = it},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCategoryExpanded)
+                    },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    modifier = Modifier.menuAnchor().fillMaxWidth()
                 )
-            },
-        ) {
-            Text("Guardar")
+
+                ExposedDropdownMenu(
+                    expanded = isCategoryExpanded,
+                    onDismissRequest = { isCategoryExpanded = false}
+                ) {
+                    typeCategories.value.forEach {
+                        DropdownMenuItem(
+                            text = { Text(it) },
+                            onClick = {
+                                categoryType = it
+                                isCategoryExpanded = false
+                            }
+                        )
+
+                    }
+                }
+            }
+            Spacer(modifier =  Modifier.height(32.dp))
+
+            ExposedDropdownMenuBox(
+                expanded = isPaymentExpanded,
+                onExpandedChange = { isPaymentExpanded = it}
+            ) {
+                TextField(
+                    label = { Text("Tipo de pago") },
+                    value = paymentType,
+                    onValueChange = { paymentType = it},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isPaymentExpanded)
+                    },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    modifier = Modifier.menuAnchor().fillMaxWidth()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = isPaymentExpanded,
+                    onDismissRequest = { isPaymentExpanded = false}
+                ) {
+                    typePayments.value.forEach { item ->
+                        DropdownMenuItem(
+                            text = { Text(item) },
+                            onClick = {
+                                paymentType = item
+                                isPaymentExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+            Spacer(modifier =  Modifier.height(40.dp))
+            ElevatedButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    viewModel.storeRecord(
+                        concept,
+                        amount.toDouble(),
+                        amountType,
+                        categoryType,
+                        paymentType
+                    )
+                },
+            ) {
+                Text("Guardar")
+            }
         }
     }
 }
