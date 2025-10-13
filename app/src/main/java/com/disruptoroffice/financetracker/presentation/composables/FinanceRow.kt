@@ -58,11 +58,12 @@ private fun FinancePreview() {
         id = 1,
         amount = 30000.00,
         description = "Deposito",
-        date = "2025-01-01 12:13:59",
+        created_date = "2025-01-01 12:13:59",
 //        type_amount ="income",
         type_amount ="expense",
         type_payment = "credit cart",
-        category = "Food"
+        category = "Food",
+        "2024-12-01 12:13:59",
     )
 
     FinanceRow(item) {

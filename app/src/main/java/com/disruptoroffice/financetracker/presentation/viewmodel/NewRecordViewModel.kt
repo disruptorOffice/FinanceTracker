@@ -12,11 +12,13 @@ import com.disruptoroffice.financetracker.data.repositories.TypePaymentRepositor
 import com.disruptoroffice.financetracker.presentation.states.NewRecordState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class NewRecordViewModel @Inject constructor(
@@ -60,7 +62,7 @@ class NewRecordViewModel @Inject constructor(
 
     fun storeRecord(
         concept: String,
-        amount: Double,
+        amount: String,
         amountType: String,
         categoryType: String,
         paymentType: String,
@@ -75,7 +77,7 @@ class NewRecordViewModel @Inject constructor(
             if (concept.isEmpty())
                 errorMap["concept"] = "Campo obligatorio"
 
-            if (amount == 0.0)
+            if (amount.isEmpty())
                 errorMap["amount"] = "Campo obligatorio"
 
             if (payment == null)
@@ -84,13 +86,13 @@ class NewRecordViewModel @Inject constructor(
             if (category == null)
                 errorMap["paymentType"] = "Campo obligatorio"
 
-            if (errorMap.size > 0) {
+            if (errorMap.isNotEmpty()) {
                 _state.value = NewRecordState.ValidationErrorForm(errorMap)
                 return@launch
             }
 
             val result = financeRepository.storeNewRecord(NewRecordRequest(
-                amount = amount,
+                amount = amount.toDouble(),
                 concept = concept,
                 type_amount = amountType,
                 category_id = category!!.id,

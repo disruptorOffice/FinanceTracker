@@ -57,6 +57,7 @@ fun FinanceRecordScreen(
     var amountType by remember { mutableStateOf(AmountType.EXPENSE.value) }
     var categoryType by remember { mutableStateOf("") }
     var paymentType by remember { mutableStateOf("") }
+    var saveButtonEnable by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         viewModel.retrieveTypePayments()
@@ -64,22 +65,40 @@ fun FinanceRecordScreen(
     }
 
     LaunchedEffect(state) {
-        if (state is NewRecordState.Success) {
-            sharedViewModel.setRefresNeeded()
-            onNavigateToDashboard()
+        when(state) {
+            is NewRecordState.Error -> {}
+            NewRecordState.Idle -> {}
+            NewRecordState.Loading -> {
+                saveButtonEnable = false
+                viewModel.resetState()
+            }
+            NewRecordState.Success -> {
+                saveButtonEnable = false
+                sharedViewModel.setRefresNeeded()
+                onNavigateToDashboard()
+            }
+            is NewRecordState.ValidationErrorForm -> {
+                saveButtonEnable = true
+                viewModel.resetState()
+            }
         }
     }
 
-    if (state is NewRecordState.Error)
+    if (state is NewRecordState.Error) {
         ErrorDialog(
             (state as NewRecordState.Error).message,
             onDismissRequest =  { viewModel.resetState() },
             onConfirmButton = { viewModel.resetState() })
+        saveButtonEnable = true
+        viewModel.resetState()
+    }
+
 
 
     Scaffold { innerPaddings ->
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPaddings)
                 .padding(all = 16.dp)
         ) {
@@ -96,7 +115,9 @@ fun FinanceRecordScreen(
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
                     },
                     colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                    modifier = Modifier.menuAnchor().fillMaxWidth()
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth(),
                 )
 
                 ExposedDropdownMenu(
@@ -166,7 +187,9 @@ fun FinanceRecordScreen(
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCategoryExpanded)
                     },
                     colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                    modifier = Modifier.menuAnchor().fillMaxWidth()
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
                 )
 
                 ExposedDropdownMenu(
@@ -200,7 +223,9 @@ fun FinanceRecordScreen(
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = isPaymentExpanded)
                     },
                     colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                    modifier = Modifier.menuAnchor().fillMaxWidth()
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
                 )
 
                 ExposedDropdownMenu(
@@ -221,10 +246,11 @@ fun FinanceRecordScreen(
             Spacer(modifier =  Modifier.height(40.dp))
             ElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
+                enabled = saveButtonEnable,
                 onClick = {
                     viewModel.storeRecord(
                         concept,
-                        amount.toDouble(),
+                        amount,
                         amountType,
                         categoryType,
                         paymentType
