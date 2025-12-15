@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,6 +32,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.disruptoroffice.financetracker.presentation.AmountType
+import com.disruptoroffice.financetracker.presentation.composables.DateTimePickerTextField
 import com.disruptoroffice.financetracker.presentation.states.NewRecordState
 import com.disruptoroffice.financetracker.presentation.viewmodel.NewRecordViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.SharedRecordViewModel
@@ -58,6 +58,7 @@ fun FinanceRecordScreen(
     var categoryType by remember { mutableStateOf("") }
     var paymentType by remember { mutableStateOf("") }
     var saveButtonEnable by remember { mutableStateOf(true) }
+    var dateRecord by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         viewModel.retrieveTypePayments()
@@ -76,6 +77,7 @@ fun FinanceRecordScreen(
                 saveButtonEnable = false
                 sharedViewModel.setRefresNeeded()
                 onNavigateToDashboard()
+                viewModel.resetState()
             }
             is NewRecordState.ValidationErrorForm -> {
                 saveButtonEnable = true
@@ -243,6 +245,14 @@ fun FinanceRecordScreen(
                     }
                 }
             }
+
+            Spacer(modifier =  Modifier.height(32.dp))
+
+            DateTimePickerTextField(
+                dateTime = dateRecord,
+                onDateTimeSelected = { dateRecord = it },
+                label = "Fecha de pago",
+            )
             Spacer(modifier =  Modifier.height(40.dp))
             ElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
@@ -253,7 +263,8 @@ fun FinanceRecordScreen(
                         amount,
                         amountType,
                         categoryType,
-                        paymentType
+                        paymentType,
+                        dateRecord,
                     )
                 },
             ) {

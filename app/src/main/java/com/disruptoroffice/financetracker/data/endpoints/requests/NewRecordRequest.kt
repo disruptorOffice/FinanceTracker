@@ -5,5 +5,6 @@ data class NewRecordRequest (
     val concept: String,
     val type_amount: String,
     val category_id: Int,
-    val type_payment_id: Int
+    val type_payment_id: Int,
+    val date_record: String? = null,
 )

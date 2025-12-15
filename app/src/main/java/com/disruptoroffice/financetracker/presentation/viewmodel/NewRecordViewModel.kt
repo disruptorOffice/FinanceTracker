@@ -66,6 +66,7 @@ class NewRecordViewModel @Inject constructor(
         amountType: String,
         categoryType: String,
         paymentType: String,
+        dateRecord: String,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             _state.value = NewRecordState.Loading
@@ -96,7 +97,8 @@ class NewRecordViewModel @Inject constructor(
                 concept = concept,
                 type_amount = amountType,
                 category_id = category!!.id,
-                type_payment_id = payment!!.id
+                type_payment_id = payment!!.id,
+                date_record = dateRecord.ifEmpty { null }
             ),
                 session.sessionToken.first())
 
