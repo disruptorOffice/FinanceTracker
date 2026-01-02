@@ -9,10 +9,12 @@ import com.disruptoroffice.financetracker.presentation.screens.DashboardScreen
 import com.disruptoroffice.financetracker.presentation.screens.FinanceRecordScreen
 import com.disruptoroffice.financetracker.presentation.screens.LoginScreen
 import com.disruptoroffice.financetracker.presentation.screens.RegisterScreen
+import com.disruptoroffice.financetracker.presentation.screens.ScheduledScreen
 import com.disruptoroffice.financetracker.presentation.viewmodel.DashboardViewmodel
 import com.disruptoroffice.financetracker.presentation.viewmodel.LoginViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.NewRecordViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.RegisterViewModel
+import com.disruptoroffice.financetracker.presentation.viewmodel.ScheduledViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.SharedRecordViewModel
 
 @Composable
@@ -21,7 +23,8 @@ fun NavigationWrapper(
     registerViewModel: RegisterViewModel,
     dashboardViewmodel: DashboardViewmodel,
     newRecordViewModel: NewRecordViewModel,
-    sharedRecordViewmodel: SharedRecordViewModel
+    sharedRecordViewmodel: SharedRecordViewModel,
+    scheduledViewmodel: ScheduledViewModel,
 ) {
     val navController = rememberNavController()
 
@@ -39,9 +42,11 @@ fun NavigationWrapper(
                 })
         }
         composable<Dashboard> {
-            DashboardScreen(dashboardViewmodel, sharedRecordViewmodel) {
-                navController.navigate(NewRecord)
-            }
+            DashboardScreen(
+                dashboardViewmodel, sharedRecordViewmodel,
+                navigateToNewRecord = { navController.navigate(NewRecord) },
+                naivageToNewScheduled = { navController.navigate(Scheduled) },
+            )
         }
         composable<Register> {
             RegisterScreen(
@@ -56,6 +61,12 @@ fun NavigationWrapper(
 
         composable<NewRecord> {
             FinanceRecordScreen(newRecordViewModel, sharedRecordViewmodel) {
+                navController.popBackStack()
+            }
+        }
+
+        composable<Scheduled> {
+            ScheduledScreen(scheduledViewmodel) {
                 navController.popBackStack()
             }
         }

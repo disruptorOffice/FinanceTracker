@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.disruptoroffice.financetracker.data.endpoints.responses.FinanceRecordResponse
+import com.disruptoroffice.financetracker.presentation.composables.CustomFloatingActionButton
 import com.disruptoroffice.financetracker.presentation.composables.FinanceRow
 import com.disruptoroffice.financetracker.presentation.states.DashboardState
 import com.disruptoroffice.financetracker.presentation.states.DashboardState2
@@ -39,11 +40,13 @@ fun DashboardScreen(
     viewModel: DashboardViewmodel,
     sharedViewModel: SharedRecordViewModel,
     navigateToNewRecord: () -> Unit,
+    naivageToNewScheduled: () -> Unit,
 ) {
     val state = viewModel.state.collectAsState()
     val shouldRefresh by sharedViewModel.shouldRefresh.collectAsState()
     val usernameState by viewModel.uiState.collectAsState()
     var username by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(shouldRefresh) {
         if (shouldRefresh) {
@@ -76,13 +79,21 @@ fun DashboardScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navigateToNewRecord()
-                }
-            ) {
-                Icon(Icons.Filled.Add, "Add record")
-            }
+            CustomFloatingActionButton(
+                expandable = expanded,
+                onFabClick = {
+                    expanded = !expanded
+                },
+                fabIcon = Icons.Filled.Add,
+                onItemClick = { value ->
+                    if (value == "payment_now") {
+                        navigateToNewRecord()
+                    } else {
+                        naivageToNewScheduled()
+                    }
+                    expanded = false
+                },
+            )
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {

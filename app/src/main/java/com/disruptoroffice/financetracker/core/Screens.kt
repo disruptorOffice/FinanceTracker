@@ -14,3 +14,6 @@ object Register
 
 @Serializable
 object NewRecord
+
+@Serializable
+object Scheduled

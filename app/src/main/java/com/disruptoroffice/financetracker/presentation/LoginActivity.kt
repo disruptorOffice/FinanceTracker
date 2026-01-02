@@ -10,9 +10,11 @@ import com.disruptoroffice.financetracker.presentation.viewmodel.DashboardViewmo
 import com.disruptoroffice.financetracker.presentation.viewmodel.LoginViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.NewRecordViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.RegisterViewModel
+import com.disruptoroffice.financetracker.presentation.viewmodel.ScheduledViewModel
 import com.disruptoroffice.financetracker.presentation.viewmodel.SharedRecordViewModel
 import com.disruptoroffice.financetracker.ui.theme.FinanceTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.getValue
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -21,6 +23,7 @@ class MainActivity : ComponentActivity() {
     private val dashboardViewmodel by viewModels<DashboardViewmodel>()
     private val newRecordViewmodel by viewModels<NewRecordViewModel>()
     private val sharedRecordViewmodel by viewModels<SharedRecordViewModel>()
+    private val scheduledViewmodel by viewModels<ScheduledViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,8 @@ class MainActivity : ComponentActivity() {
                     registerViewModel = registerViewModel,
                     dashboardViewmodel = dashboardViewmodel,
                     newRecordViewModel = newRecordViewmodel,
-                    sharedRecordViewmodel = sharedRecordViewmodel
+                    sharedRecordViewmodel = sharedRecordViewmodel,
+                    scheduledViewmodel = scheduledViewmodel,
                 )
         }
     }

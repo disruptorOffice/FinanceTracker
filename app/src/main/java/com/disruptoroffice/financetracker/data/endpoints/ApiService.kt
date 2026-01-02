@@ -2,10 +2,13 @@ package com.disruptoroffice.financetracker.data.endpoints
 
 import com.disruptoroffice.financetracker.data.endpoints.requests.LoginRequest
 import com.disruptoroffice.financetracker.data.endpoints.requests.NewRecordRequest
+import com.disruptoroffice.financetracker.data.endpoints.requests.NewScheduledRequest
 import com.disruptoroffice.financetracker.data.endpoints.requests.RegisterRequest
 import com.disruptoroffice.financetracker.data.endpoints.responses.FinanceRecordResponse
+import com.disruptoroffice.financetracker.data.endpoints.responses.FrequencyResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.LoginResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.NewRecordResponse
+import com.disruptoroffice.financetracker.data.endpoints.responses.NewScheduledResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.RefreshTokenResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.RegisterResponse
 import com.disruptoroffice.financetracker.data.endpoints.responses.TypeCategoryResponse
@@ -41,6 +44,13 @@ interface ApiService {
     suspend fun refreshToken(
         @Header("Cookie") cookie: String
     ) : Response<RefreshTokenResponse>
+
+    @GET("v1/frequencies")
+    suspend fun retrieveFrequencies(): Response<List<FrequencyResponse>>
+
+
+    @POST("v1/scheduled")
+    suspend fun storeSheduledRecord(@Body request: NewScheduledRequest): Response<NewScheduledResponse>
 
 
 }
